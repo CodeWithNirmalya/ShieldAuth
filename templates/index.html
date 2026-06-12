@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShieldAuth | Premium Password Strength Analyzer</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔐</text></svg>">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-decor">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+
+    <div class="app-container">
+        <header class="app-header animate-fade-in">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="url(#logo-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 6V12L16 14" stroke="url(#logo-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="logo-grad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#818cf8" />
+                            <stop offset="1" stop-color="#c084fc" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span class="logo-text">Shield<span class="accent">Auth</span></span>
+            </div>
+            <p class="subtitle">Secure, offline-first password strength analyzer & custom generator</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Left Panel: Password Analyzer -->
+            <section class="card analyzer-card animate-slide-up" id="analyzer-section">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        Analyze Password
+                    </h2>
+                    
+                    <div class="input-group">
+                        <label for="password-input">Enter password to check</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="password-input" placeholder="Type a password..." autocomplete="off" spellcheck="false">
+                            <button type="button" id="toggle-visibility" class="icon-btn" aria-label="Toggle Password Visibility">
+                                <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <svg class="eye-off-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Strength Indicator Bar -->
+                    <div class="strength-meter-container">
+                        <div class="meter-labels">
+                            <span id="strength-label">Strength: <strong id="strength-val" class="weak">Weak</strong></span>
+                            <span id="score-label">Score: <strong id="score-val">0/100</strong></span>
+                        </div>
+                        <div class="meter-bar-track">
+                            <div class="meter-bar" id="strength-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Details Grid -->
+                    <div class="metrics-grid">
+                        <div class="metric-tile">
+                            <span class="metric-label">Entropy</span>
+                            <span class="metric-value" id="entropy-val">0.00 <span class="unit">bits</span></span>
+                            <span class="metric-desc">Information density</span>
+                        </div>
+                        <div class="metric-tile">
+                            <span class="metric-label">Time to Crack</span>
+                            <span class="metric-value" id="crack-time-val">instant</span>
+                            <span class="metric-desc">At 10B guesses/sec</span>
+                        </div>
+                    </div>
+
+                    <!-- Criteria Checklist -->
+                    <div class="checklist-section">
+                        <h3>Character Checklist</h3>
+                        <ul class="checklist" id="checklist">
+                            <li id="chk-lowercase" class="unchecked">
+                                <span class="check-icon"></span> Lowercase Letters (a-z)
+                            </li>
+                            <li id="chk-uppercase" class="unchecked">
+                                <span class="check-icon"></span> Uppercase Letters (A-Z)
+                            </li>
+                            <li id="chk-digits" class="unchecked">
+                                <span class="check-icon"></span> Digits (0-9)
+                            </li>
+                            <li id="chk-special" class="unchecked">
+                                <span class="check-icon"></span> Special Characters (!@#$...)
+                            </li>
+                            <li id="chk-patterns" class="checked">
+                                <span class="check-icon"></span> No Common Patterns / Repeats
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Suggestions Panel -->
+                    <div class="suggestions-container hidden" id="suggestions-box">
+                        <h4>Suggestions for Improvement</h4>
+                        <ul id="suggestions-list">
+                            <!-- Populated by JS -->
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Panel: Password Generator -->
+            <section class="card generator-card animate-slide-up delay-1" id="generator-section">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                        </svg>
+                        Generate Secure Password
+                    </h2>
+
+                    <!-- Generated Output Display -->
+                    <div class="generator-output-wrapper">
+                        <input type="text" id="generated-password" readonly placeholder="Click Generate below" aria-label="Generated Password">
+                        <button type="button" id="copy-btn" class="icon-btn" aria-label="Copy to Clipboard" title="Copy to Clipboard">
+                            <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            <svg class="copied-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Config Settings -->
+                    <div class="generator-settings">
+                        <div class="slider-group">
+                            <div class="slider-labels">
+                                <span>Password Length</span>
+                                <span id="length-val">16</span>
+                            </div>
+                            <input type="range" id="length-slider" min="8" max="64" value="16" aria-label="Password Length Slider">
+                        </div>
+
+                        <div class="options-grid">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="gen-uppercase" checked>
+                                <span class="checkmark"></span>
+                                Uppercase (A-Z)
+                            </label>
+                            
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="gen-lowercase" checked>
+                                <span class="checkmark"></span>
+                                Lowercase (a-z)
+                            </label>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="gen-numbers" checked>
+                                <span class="checkmark"></span>
+                                Numbers (0-9)
+                            </label>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="gen-symbols" checked>
+                                <span class="checkmark"></span>
+                                Symbols (!@#$...)
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="button" id="generate-btn" class="primary-btn">
+                        <span>Generate Password</span>
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <polyline points="1 20 1 14 7 14"></polyline>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        </svg>
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="app-footer animate-fade-in">
+            <p>ShieldAuth Password Strength Analyzer. Created in Python & FastAPI. Fully Secure.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
